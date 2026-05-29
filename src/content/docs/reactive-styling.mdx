@@ -1,0 +1,41 @@
+import { AGENT_GRAPH } from "@/lib/mantou";
+
+<Lead>
+  A <Code>style</Code> block maps a visual property to an expression. The
+  expression is re-evaluated whenever state, selection, or structure changes.
+</Lead>
+
+## Node styles
+
+<CodeBlock
+  code={`style node {
+  background: node.on ? chili : node.parent.on ? bamboo : cream
+  border: node.selected ? chili : border
+  opacity: node.hidden ? 0 : node.dimmed ? 0.25 : 1
+  pulse: node.status == "running"
+  shape: node.type == "database" ? database : rounded
+}`}
+/>
+
+Supported node properties: <Code>background</Code>, <Code>border</Code>, <Code>text</Code>, <Code>opacity</Code>, <Code>pulse</Code>, <Code>icon</Code>, and <Code>shape</Code> (one of <Code>rounded</Code>, <Code>circle</Code>, <Code>database</Code>, <Code>diamond</Code>).
+
+## Edge styles
+
+<CodeBlock
+  code={`style edge {
+  color: edge.active ? chili : bamboo
+  width: edge.active ? 3 : 1
+  opacity: edge.dimmed ? 0.2 : 1
+}`}
+/>
+
+## Theme tokens
+
+Colors are written as bare theme tokens that resolve to the Mantou palette: <Code>chili</Code>, <Code>cream</Code>, <Code>scallion</Code>, <Code>bamboo</Code>, <Code>soy</Code>, <Code>danger</Code>, <Code>border</Code>, <Code>muted</Code>. Raw CSS colors work too.
+
+<Callout type="tip" title="Live recompute">
+  In the diagram below, set a node's status to <Code>running</Code> in the panel —
+  <Code>pulse</Code> turns on instantly because the style rule re-runs.
+</Callout>
+
+<Flow title="Reactive styles" height={400} source={AGENT_GRAPH} />

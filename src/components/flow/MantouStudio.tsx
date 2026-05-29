@@ -1,11 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ReactFlowProvider } from "@xyflow/react";
 import { DiagramProvider, useDiagram } from "./DiagramProvider";
 import { FlowCanvas } from "./FlowCanvas";
 import { DetailPanel } from "./DetailPanel";
+import { MdxPreview } from "@/components/docs/MdxPreview";
 import { SAMPLES, mantouTheme, evaluateExpression } from "@/lib/mantou";
+import { firstMantouDiagramSource } from "@/lib/mantou/document/extract";
+import { PLAYGROUND_MDX_SAMPLE } from "@/lib/mantou/document/playground-sample";
 import type { LayoutKind } from "@/lib/mantou";
 
 const LAYOUTS: LayoutKind[] = ["dagre", "tree"];
@@ -91,6 +94,28 @@ function SourceEditor() {
   );
 }
 
+function MdxEditor({
+  value,
+  onChange,
+}: {
+  value: string;
+  onChange: (v: string) => void;
+}) {
+  return (
+    <div className="flex h-full flex-col">
+      <span className="mb-2 text-[10px] font-bold uppercase tracking-widest text-[#a89b82]">
+        Document (MDX)
+      </span>
+      <textarea
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        spellCheck={false}
+        className="min-h-[220px] flex-1 w-full resize-none rounded-xl border border-[#e3d7be] bg-white/80 p-3 font-mono text-[12px] leading-relaxed text-[#3a2a20] outline-none focus:border-[#e2483d]"
+      />
+    </div>
+  );
+}
+
 function ExpressionTester() {
   const view = useDiagram((s) => s.view);
   const contexts = useDiagram((s) => s.contexts);
@@ -161,37 +186,74 @@ function Legend() {
   );
 }
 
-function StudioInner() {
+function StudioInner({
+  mdxSource,
+  setMdxSource,
+}: {
+  mdxSource: string;
+  setMdxSource: (v: string) => void;
+}) {
+  const load = useDiagram((s) => s.load);
+  const diagramSource = useDiagram((s) => s.source);
+
+  useEffect(() => {
+    const extracted = firstMantouDiagramSource(mdxSource);
+    if (extracted && extracted.trim() !== diagramSource.trim()) {
+      load(extracted);
+    }
+  }, [mdxSource, load, diagramSource]);
+
   return (
-    <div className="grid grid-cols-1 gap-4 lg:grid-cols-[360px_1fr_320px]">
-      <div className="flex flex-col gap-4">
-        <SourceEditor />
-        <ExpressionTester />
-        <Legend />
-      </div>
-
-      <div className="flex flex-col gap-3">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <SampleTabs />
-          <Toolbar />
-        </div>
-        <div className="relative h-[560px] overflow-hidden rounded-3xl border border-[#e3d7be] bg-[#fbf4e6] shadow-[0_24px_60px_-30px_rgba(58,42,32,0.5)]">
-          <FlowCanvas />
+    <div className="flex flex-col gap-6">
+      <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
+        <MdxEditor value={mdxSource} onChange={setMdxSource} />
+        <div className="max-h-[360px] overflow-y-auto rounded-xl border border-[#e3d7be] bg-white/50 p-4">
+          <span className="mb-3 block text-[10px] font-bold uppercase tracking-widest text-[#a89b82]">
+            MDX preview
+          </span>
+          <MdxPreview source={mdxSource} />
         </div>
       </div>
 
-      <div className="h-[560px] overflow-hidden rounded-3xl border border-[#e3d7be] bg-white/50 lg:mt-[44px]">
-        <DetailPanel />
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-[360px_1fr_320px]">
+        <div className="flex flex-col gap-4">
+          <SourceEditor />
+          <ExpressionTester />
+          <Legend />
+        </div>
+
+        <div className="flex flex-col gap-3">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <SampleTabs />
+            <Toolbar />
+          </div>
+          <div className="relative h-[560px] overflow-hidden rounded-3xl border border-[#e3d7be] bg-[#fbf4e6] shadow-[0_24px_60px_-30px_rgba(58,42,32,0.5)]">
+            <FlowCanvas />
+          </div>
+        </div>
+
+        <div className="h-[560px] overflow-hidden rounded-3xl border border-[#e3d7be] bg-white/50 lg:mt-[44px]">
+          <DetailPanel />
+        </div>
       </div>
     </div>
   );
 }
 
-export function MantouStudio({ initialSource }: { initialSource: string }) {
+export function MantouStudio({
+  initialSource,
+  initialMdx = PLAYGROUND_MDX_SAMPLE,
+}: {
+  initialSource: string;
+  initialMdx?: string;
+}) {
+  const [mdxSource, setMdxSource] = useState(initialMdx);
+  const extracted = firstMantouDiagramSource(initialMdx) ?? initialSource;
+
   return (
-    <DiagramProvider source={initialSource}>
+    <DiagramProvider source={extracted}>
       <ReactFlowProvider>
-        <StudioInner />
+        <StudioInner mdxSource={mdxSource} setMdxSource={setMdxSource} />
       </ReactFlowProvider>
     </DiagramProvider>
   );

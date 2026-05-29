@@ -1,0 +1,81 @@
+<Lead>
+  A <Code>&lt;Flow&gt;</Code> takes a diagram source string as its child or{" "}
+  <Code>source</Code> prop. Author it inside MDX exactly like a fenced code block.
+</Lead>
+
+## 1. Import the component
+
+<CodeBlock
+  language="mdx"
+  code={`import { Flow } from "mantou/react";
+
+# Architecture
+
+Here is our agent topology:
+
+\`\`\`mantou title="Agent Dependency Graph"
+node Planner { type: agent  on: true  status: running }
+node Researcher { type: subagent  parent: Planner }
+Planner -> Researcher
+
+style node {
+  background: node.on ? chili : node.parent.on ? bamboo : cream
+}
+\`\`\``}
+/>
+
+## 2. Anatomy of a diagram
+
+A source has three kinds of statements: **node** declarations, **edges**, and
+**style** blocks.
+
+<CodeBlock
+  code={`node Planner {
+  type: agent
+  on: true
+  status: running
+}
+
+node Researcher {
+  type: subagent
+  parent: Planner
+  on: false
+}
+
+Planner -> Researcher
+
+style node {
+  background: node.on ? chili : node.parent.on ? bamboo : cream
+  border: node.selected ? chili : border
+  pulse: node.status == "running"
+}`}
+/>
+
+That renders to a live diagram:
+
+```mantou title="Hello, Mantou" height=340
+node Planner {
+  type: agent
+  on: true
+  status: running
+}
+
+node Researcher {
+  type: subagent
+  parent: Planner
+  on: false
+}
+
+Planner -> Researcher
+
+style node {
+  background: node.on ? chili : node.parent.on ? bamboo : cream
+  border: node.selected ? chili : border
+  pulse: node.status == "running"
+}
+```
+
+<Callout type="tip" title="Edit and watch">
+  Head to the [Playground](/docs/playground) to edit diagram source and see styles
+  recompute on every keystroke.
+</Callout>

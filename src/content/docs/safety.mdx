@@ -1,0 +1,23 @@
+<Lead>
+  Mantou treats diagram source as untrusted. The expression evaluator and the
+  expansion endpoint are both deliberately constrained.
+</Lead>
+
+## Expression sandbox
+
+- Hand-written lexer + recursive-descent parser — no <Code>Function</Code> or <Code>eval</Code>.
+- Member access only reads own properties of plain objects.
+- <Code>__proto__</Code>, <Code>constructor</Code>, <Code>prototype</Code>, <Code>call</Code>, <Code>apply</Code>, <Code>bind</Code> are blocked.
+- No assignment, loops, function calls (beyond <Code>any</Code>/<Code>all</Code>), or imports.
+
+## Filesystem
+
+- Only files named <Code>package.json</Code> can be read.
+- Absolute paths are rejected.
+- Paths that resolve outside the project directory are rejected.
+- No network access of any kind.
+
+<Callout type="note" title="Defense in depth">
+  Even if a diagram author writes a hostile expression, the worst outcome is a
+  style that fails to evaluate — surfaced as an error, never executed.
+</Callout>

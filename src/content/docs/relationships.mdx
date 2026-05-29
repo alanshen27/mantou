@@ -1,0 +1,31 @@
+import { ANCESTRY_GRAPH } from "@/lib/mantou";
+
+<Lead>
+  After parsing, Mantou builds a relationship index so expressions can walk the
+  graph cheaply.
+</Lead>
+
+## Accessors
+
+- <Code>node.parent</Code> — the explicit parent reference
+- <Code>node.children</Code> — direct children
+- <Code>node.ancestors</Code> — parent chain to the root
+- <Code>node.descendants</Code> — everything beneath
+- <Code>node.neighbors</Code> — nodes connected by an edge
+- <Code>node.incoming</Code> / <Code>node.outgoing</Code> — edges
+
+## Deep styling
+
+<CodeBlock
+  code={`style node {
+  background: node.selected ? chili
+    : node.ancestors.any(selected) ? bamboo
+    : node.descendants.any(status == "failed") ? danger
+    : cream
+  border: node.parent.selected ? scallion : border
+}`}
+/>
+
+Select **Root** or **Backend** below — descendants tint via <Code>ancestors.any(selected)</Code>, and any branch containing a failed node turns <Code>danger</Code>.
+
+<Flow title="Org / Dependency Tree" height={520} source={ANCESTRY_GRAPH} />

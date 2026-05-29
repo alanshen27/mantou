@@ -1,0 +1,58 @@
+import { SERVICE_GRAPH } from "@/lib/mantou";
+
+<Lead>
+  The diagram source is line-oriented. Declare nodes with metadata, then connect
+  them with arrows.
+</Lead>
+
+## Nodes
+
+Node metadata supports booleans, strings, and numbers. Reserved keys (<Code>type</Code>, <Code>parent</Code>, <Code>group</Code>, <Code>label</Code>) map to node fields; <Code>on</Code> and <Code>status</Code> become runtime state; everything else lands on <Code>node.data</Code>.
+
+<CodeBlock
+  code={`node Gateway {
+  type: service
+  on: true
+  status: running
+  cost: 0.21
+}`}
+/>
+
+These become accessible in expressions as:
+
+- <Code>node.type</Code> → <Code>"service"</Code>
+- <Code>node.on</Code> → <Code>true</Code>
+- <Code>node.status</Code> → <Code>"running"</Code>
+- <Code>node.data.cost</Code> → <Code>0.21</Code>
+
+## Edges
+
+Connect nodes with <Code>-&gt;</Code>. Add a label after a colon, or use an <Code>edge</Code> block to attach metadata.
+
+<CodeBlock
+  code={`Gateway -> Auth
+Gateway -> Orders : sync
+
+edge Orders -> Postgres {
+  active: true
+}`}
+/>
+
+## Parent / child
+
+Set <Code>parent:</Code> explicitly on a node. This powers relationship accessors like <Code>node.parent.on</Code> and <Code>node.ancestors</Code>.
+
+<CodeBlock
+  code={`node Researcher {
+  type: subagent
+  parent: Planner
+  on: false
+}`}
+/>
+
+<Flow title="Service Mesh" height={460} source={SERVICE_GRAPH} />
+
+<Caption>
+  Databases render with a distinct shape; the degraded service is flagged in{" "}
+  <Code>danger</Code>.
+</Caption>

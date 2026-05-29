@@ -126,7 +126,7 @@ export default function Home() {
           </div>
           <div className="overflow-hidden rounded-2xl border border-[#34251c] bg-[#241812] shadow-sm">
             <div className="border-b border-white/10 px-4 py-2 text-[11px] font-semibold uppercase tracking-widest text-[#caa06a]">
-              page.mdx
+              src/content/docs/quick-start.mdx
             </div>
             <pre className="overflow-x-auto px-4 py-4 text-[12.5px] leading-relaxed">
               <code className="font-mono text-[#f3e7d0]">{CODE}</code>

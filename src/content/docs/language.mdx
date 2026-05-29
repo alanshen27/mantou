@@ -1,0 +1,83 @@
+<Lead>
+  Mantou is a layered language: GFM prose in MDX, document components and fences,
+  a graph DSL for diagrams, and a sandboxed expression language for reactive styles.
+</Lead>
+
+## File formats
+
+| Extension | Role |
+| --------- | ---- |
+| `.mdx` | Primary authoring format (Markdown + JSX) |
+| `.mantou` | Alias extension — same compiler pipeline as `.mdx` |
+| `.md` | Optional plain Markdown with GFM (no JSX unless configured) |
+
+Place pages under `src/content/docs/` or `src/app/` with Next.js `pageExtensions` including `mdx` and `mantou`.
+
+## Layer 1 — Prose (GFM)
+
+Enabled via `remark-gfm`:
+
+- Tables, strikethrough, task lists, autolinks
+- Standard headings, lists, blockquotes, thematic breaks
+
+Headings and paragraphs use Mantou typography through `mdx-components.tsx`.
+
+## Layer 2 — Document nodes (MDX)
+
+Register custom blocks in the document node engine (`src/lib/mantou/document/`).
+
+| Component | Purpose |
+| --------- | ------- |
+| `<Flow />` | Interactive reactive diagram |
+| `<Lead />` | Intro paragraph styling |
+| `<Callout />` | Note / tip / warning |
+| `<Caption />` | Diagram caption |
+| `<CodeBlock />` | Syntax-highlighted fence display |
+
+Import from the package:
+
+<CodeBlock
+  language="mdx"
+  code={`import { Flow, Callout } from "mantou/react";`}
+/>
+
+## Layer 3 — `mantou` fences
+
+Fenced blocks with language `mantou` render as `<Flow />` automatically:
+
+<CodeBlock
+  language="mantou"
+  code={`\`\`\`mantou title="Agent Graph" layout=dagre height=420
+node Planner { type: agent  on: true }
+Planner -> Researcher
+\`\`\``}
+/>
+
+Fence meta: `title="..."`, `layout=dagre|tree`, `height=NNN`.
+
+## Layer 4 — Graph DSL
+
+Line-oriented source inside `<Flow>` or `mantou` fences:
+
+- `node Id { key: value }`
+- `A -> B` / `edge A -> B { ... }`
+- `style node|edge { prop: expression }`
+- `on expand Id { add dependencies from "package.json" depth N }`
+
+See [Graph syntax](/docs/graph-syntax).
+
+## Layer 5 — Expression language
+
+Style rule values are compiled and evaluated in a sandbox. See [Expression language](/docs/expression-language) and [Safety model](/docs/safety).
+
+## Package exports
+
+| Import path | Contents |
+| ----------- | -------- |
+| `mantou` | Graph parser, expressions, samples, compile helpers |
+| `mantou/react` | `Flow`, `DiagramProvider`, document components |
+| `mantou/mdx` | `mantouMdxComponents`, `remarkMantou`, `compileMantouMdx` |
+
+## Playground preview
+
+The docs playground compiles MDX on the server (`POST /api/mdx/preview`) with the same remark plugins and an allowlisted component scope — no arbitrary imports in preview v1.

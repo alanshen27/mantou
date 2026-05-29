@@ -1,0 +1,35 @@
+import { AGENT_GRAPH } from "@/lib/mantou";
+
+<Lead>
+  Mantou is an MDX documentation system with one superpower: diagrams that think.
+  Drop a <Code>&lt;Flow&gt;</Code> block into any page and it renders as a
+  stateful, interactive system map — not a static image.
+</Lead>
+
+Authors write diagrams in a small Mermaid-like syntax. Node and edge appearance
+is driven by a safe expression language that can read metadata, runtime state,
+graph relationships, and the reader's own selection — all recomputed live, with
+no arbitrary JavaScript ever executed.
+
+<Flow title="Agent Dependency Graph" height={420} source={AGENT_GRAPH} />
+
+<Caption>
+  Click a node. Connected nodes light up, the rest dim. Toggle a node's power in
+  the panel and watch children react via <Code>node.parent.on</Code>.
+</Caption>
+
+## Why Mantou?
+
+- **Diagrams as data.** Every <Code>&lt;Flow&gt;</Code> parses into a graph AST, a
+  relationship index, runtime state, and reactive style rules.
+- **Reactive styling.** Appearance depends on <Code>node.on</Code>,{" "}
+  <Code>node.parent.selected</Code>, <Code>node.children.any(on)</Code>, and more.
+- **Safe by construction.** A tiny expression language — no <Code>eval</Code>, no
+  globals, no filesystem beyond a scoped <Code>package.json</Code> read.
+- **Interactive.** Selection, hover, focus, dependency expansion, and live relayout,
+  built in.
+
+<Callout type="note" title="Not Mermaid">
+  Mantou uses React Flow for rendering instead of producing a flat image, so
+  diagrams stay interactive and reactive inside your documentation.
+</Callout>

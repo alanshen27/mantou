@@ -43,7 +43,9 @@ export default async function DocPageRoute({
         {page.title}
       </h1>
 
-      <div className="text-[15px]">{page.body}</div>
+      <div className="text-[15px]">
+        <page.Component />
+      </div>
 
       <nav className="mt-16 grid grid-cols-2 gap-4 border-t border-[#e3d7be] pt-6">
         <div>

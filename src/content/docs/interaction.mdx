@@ -1,0 +1,29 @@
+import { SERVICE_GRAPH } from "@/lib/mantou";
+
+<Lead>
+  Reader interaction feeds straight back into the style expressions through view
+  state.
+</Lead>
+
+## Selecting a node
+
+1. The node is marked <Code>node.selected</Code>.
+2. Directly connected nodes become <Code>node.active</Code>.
+3. Unrelated nodes become <Code>node.dimmed</Code>.
+4. Connected edges become <Code>edge.active</Code>.
+5. The detail panel opens.
+
+These flags are just fields in the expression context, so styling reacts automatically:
+
+<CodeBlock
+  code={`style node {
+  opacity: node.dimmed ? 0.35 : 1
+  border: node.selected ? chili : node.parent.selected ? scallion : border
+}
+style edge {
+  color: edge.active ? chili : bamboo
+  width: edge.active ? 3 : 1
+}`}
+/>
+
+<Flow title="Click around" height={420} source={SERVICE_GRAPH} />

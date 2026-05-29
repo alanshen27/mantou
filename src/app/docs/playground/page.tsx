@@ -16,8 +16,9 @@ export default function PlaygroundPage() {
         Playground
       </h1>
       <p className="mb-8 max-w-2xl text-[15px] leading-relaxed text-[#6b5a48]">
-        Edit the diagram source, switch samples, and test expressions. Styles
-        recompute on every keystroke, selection, and state change.
+        Edit MDX prose and `mantou` fenced diagrams together. The MDX
+        preview compiles on the server; diagram styles recompute on every
+        keystroke, selection, and state change.
       </p>
       <MantouStudio initialSource={AGENT_GRAPH} />
     </div>

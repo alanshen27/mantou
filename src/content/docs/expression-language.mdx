@@ -1,0 +1,37 @@
+<Lead>
+  Mantou ships a minimal expression language. It is powerful enough for conditional
+  styling and intentionally too small to do anything unsafe.
+</Lead>
+
+## Allowed
+
+- Property access: <Code>node.on</Code>, <Code>node.parent.on</Code>, <Code>edge.from.status</Code>
+- Comparisons: <Code>==</Code> <Code>!=</Code> <Code>&gt;</Code> <Code>&lt;</Code> <Code>&gt;=</Code> <Code>&lt;=</Code>
+- Booleans: <Code>&amp;&amp;</Code> <Code>||</Code> <Code>!</Code>
+- Ternary: <Code>condition ? a : b</Code>
+- Literals: strings, numbers, booleans
+- Theme tokens: <Code>chili</Code>, <Code>cream</Code>, …
+- Array helpers: <Code>any(...)</Code> and <Code>all(...)</Code>
+
+## Examples
+
+<CodeBlock
+  code={`node.on ? chili : cream
+node.parent.on ? bamboo : cream
+node.status == "running" ? chili : scallion
+node.selected ? chili : node.parent.selected ? bamboo : cream
+node.children.any(on) ? scallion : cream
+node.descendants.any(status == "failed") ? danger : cream
+edge.from.on && edge.to.on ? chili : bamboo`}
+/>
+
+## Array helpers
+
+<Code>any</Code> and <Code>all</Code> take a predicate evaluated against each element, where the element's fields are in scope. So <Code>node.children.any(on)</Code> is true when any child has <Code>on: true</Code>.
+
+<Callout type="warning" title="Disallowed">
+  No arbitrary JavaScript, function definitions, imports, loops, assignment,
+  mutation, network or filesystem access, <Code>eval</Code>, or access to{" "}
+  <Code>window</Code>, <Code>document</Code>, <Code>process</Code>, prototypes, or
+  globals.
+</Callout>

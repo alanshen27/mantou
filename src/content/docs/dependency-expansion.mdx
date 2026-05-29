@@ -1,0 +1,30 @@
+import { ANCESTRY_GRAPH } from "@/lib/mantou";
+
+<Lead>
+  Diagrams can grow at runtime. The <Code>on expand</Code> binding adds a button
+  that safely reads a <Code>package.json</Code> and adds dependency nodes.
+</Lead>
+
+## Syntax
+
+<CodeBlock
+  code={`on expand WebApp {
+  add dependencies from "package.json" depth 1
+}`}
+/>
+
+## Behavior
+
+1. An **Expand** button appears in the node detail panel.
+2. On click, the runtime reads the <Code>package.json</Code> — inside the project directory only.
+3. It parses <Code>dependencies</Code> and <Code>devDependencies</Code>.
+4. Dependency nodes and edges are added, then the graph relayouts.
+
+<Callout type="warning" title="Scoped & manual">
+  Expansion never happens automatically, and the path is resolved strictly within
+  the project directory — traversal and absolute paths are rejected.
+</Callout>
+
+Select **WebApp** below and click **Expand dependencies**:
+
+<Flow title="Live expansion" height={520} source={ANCESTRY_GRAPH} />

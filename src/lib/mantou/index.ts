@@ -16,3 +16,11 @@ export {
 } from "./expression";
 export { SAMPLES, AGENT_GRAPH, SERVICE_GRAPH, ANCESTRY_GRAPH } from "./samples";
 export type { MantouSample } from "./samples";
+export {
+  mantouMdxComponents,
+  remarkMantou,
+  compileMantouMdx,
+  extractMantouDiagramSources,
+  firstMantouDiagramSource,
+} from "./mdx";
+export type { MantouDocumentNode } from "./document/types";

@@ -1,3 +1,7 @@
+# Mantou
+
+MDX-native documentation with reactive, interactive diagrams. See [docs/MANTOU-LANGUAGE.md](docs/MANTOU-LANGUAGE.md) for the full language specification.
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
